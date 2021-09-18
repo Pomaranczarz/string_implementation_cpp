@@ -79,7 +79,12 @@ public:
 	bool operator!=(const char* str);
 
 public:
-	class iterator : public std::iterator<std::random_access_iterator_tag, char> {
+	size_t find(char c);
+	size_t find(const char* str);
+	size_t find(const String& str);
+
+public:
+	class iterator {
 	public:
 		explicit iterator(char* p);
 
@@ -97,7 +102,7 @@ public:
 		char* data;
 	};
 
-	class const_iterator : public std::iterator<std::random_access_iterator_tag, char> {
+	class const_iterator {
 	public:
 		explicit const_iterator(char* p);
 
@@ -115,7 +120,7 @@ public:
 		char* data;
 	};
 
-	class rev_iterator : public std::iterator<std::random_access_iterator_tag, char> {
+	class rev_iterator {
 	public:
 		explicit rev_iterator(char* p);
 		
@@ -133,6 +138,24 @@ public:
 		char* data;
 	};
 
+	class const_rev_iterator {
+	public:
+		explicit const_rev_iterator(char* p);
+
+		const_rev_iterator& operator++();
+		const_rev_iterator operator++(int);
+		const_rev_iterator& operator--();
+		const_rev_iterator operator--(int);
+		const_rev_iterator operator+(int step);
+		const_rev_iterator operator-(int step);
+
+		bool operator==(const const_rev_iterator& another);
+		bool operator!=(const const_rev_iterator& another);
+		const char& operator*() const;
+	private:
+		char* data;
+	};
+
 	iterator begin();
 	iterator end();
 
@@ -141,6 +164,9 @@ public:
 
 	rev_iterator rbegin();
 	rev_iterator rend();
+
+	const_rev_iterator crbegin();
+	const_rev_iterator crend();
 private:
 	size_t strlen(const char* str);
 	size_t strlen(char* str);

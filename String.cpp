@@ -169,6 +169,16 @@ String::rev_iterator String::rend()
 	return rev_iterator(m_data - 1);
 }
 
+String::const_rev_iterator String::crbegin()
+{
+	return const_rev_iterator(m_data + m_size - 1);
+}
+
+String::const_rev_iterator String::crend()
+{
+	return const_rev_iterator(m_data - 1);
+}
+
 size_t String::strlen(const char* str)
 {
 	size_t count{ 0 };
@@ -438,6 +448,47 @@ bool String::operator!=(const char* str)
 	return !(*this == str);
 }
 
+size_t String::find(char c)
+{
+	for (size_t i = 0; i < size(); i++)
+		if (m_data[i] == c)
+			return i;
+
+	return npos;
+}
+
+size_t String::find(const char* str)
+{
+	size_t str_count{ 0 };
+	for (size_t i = 0; i < length(); i++) {
+		if (m_data[i] == str[str_count])
+			str_count++;
+		else
+			str_count = 0;
+
+		if (str_count == strlen(str))
+			return i - str_count + 1;
+	}
+
+	return npos;
+}
+
+size_t String::find(const String& str)
+{
+	size_t str_count{ 0 };
+	for (size_t i = 0; i < length(); i++) {
+		if (m_data[i] == str[str_count])
+			str_count++;
+		else
+			str_count = 0;
+
+		if (str_count == str.size())
+			return i - str_count + 1;
+	}
+
+	return npos;
+}
+
 char& String::operator[](size_t index)
 {
 	return m_data[index];
@@ -662,6 +713,65 @@ bool String::rev_iterator::operator!=(const rev_iterator& another)
 }
 
 char& String::rev_iterator::operator*()
+{
+	return *data;
+}
+
+String::const_rev_iterator::const_rev_iterator(char* p)
+{
+	data = p;
+}
+
+
+String::const_rev_iterator& String::const_rev_iterator::operator++()
+{
+	data--;
+	return *this;
+}
+
+String::const_rev_iterator String::const_rev_iterator::operator++(int)
+{
+	const_rev_iterator retval = *this;
+	data--;
+
+	return retval;
+}
+
+String::const_rev_iterator& String::const_rev_iterator::operator--()
+{
+	data++;
+	return *this;
+}
+
+String::const_rev_iterator String::const_rev_iterator::operator--(int)
+{
+	const_rev_iterator retval = *this;
+	data++;
+
+	return retval;
+}
+
+String::const_rev_iterator String::const_rev_iterator::operator+(int step)
+{
+	return const_rev_iterator(this->data - step);
+}
+
+String::const_rev_iterator String::const_rev_iterator::operator-(int step)
+{
+	return const_rev_iterator(this->data + step);
+}
+
+bool String::const_rev_iterator::operator==(const const_rev_iterator& another)
+{
+	return data == another.data;
+}
+
+bool String::const_rev_iterator::operator!=(const const_rev_iterator& another)
+{
+	return !(*this == another);
+}
+
+const char& String::const_rev_iterator::operator*() const
 {
 	return *data;
 }
