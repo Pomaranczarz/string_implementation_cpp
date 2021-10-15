@@ -722,7 +722,6 @@ String::const_rev_iterator::const_rev_iterator(char* p)
 	data = p;
 }
 
-
 String::const_rev_iterator& String::const_rev_iterator::operator++()
 {
 	data--;
